@@ -2,8 +2,8 @@ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 const SUPABASE_URL = "https://udxyhbiodwgtzpdormdn.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_6cA51Hb36TLcjd21nuVm4g_ZNCvt684";
-const BOSS_SUPABASE_URL = "";
-const BOSS_SUPABASE_ANON_KEY = "";
+const BOSS_SUPABASE_URL = "https://ebffiormphywfpwfftqc.supabase.co";
+const BOSS_SUPABASE_ANON_KEY = "sb_publishable_enHtWINzSU1wvjnDJzpLzA_6Lv2cofx";
 
 export const APP_SETTINGS_TABLE = "app_settings";
 export const ADMIN_PASSWORD_KEY = "admin_password";
