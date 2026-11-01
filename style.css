@@ -2755,3 +2755,5 @@ button {
     width: 100%;
   }
 }
+
+#bossParticipationSourceSelect { width: auto; min-width: 90px; flex: 0 0 auto; }

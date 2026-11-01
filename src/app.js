@@ -12,6 +12,7 @@ import {
   ADMIN_PASSWORD_KEY,
   APP_SETTINGS_TABLE,
   bossSupabase,
+  unionBossSupabase,
   supabase
 } from "./core/supabaseClient.js";
 import {
@@ -302,6 +303,7 @@ function bindElements() {
   el.bossParticipationEndTimeInput = document.getElementById("bossParticipationEndTimeInput");
   el.bossParticipationBossInput = document.getElementById("bossParticipationBossInput");
   el.bossParticipationParticipantInput = document.getElementById("bossParticipationParticipantInput");
+  el.bossParticipationSourceSelect = document.getElementById("bossParticipationSourceSelect");
   el.bossParticipationSearchBtn = document.getElementById("bossParticipationSearchBtn");
   el.bossParticipationResetBtn = document.getElementById("bossParticipationResetBtn");
   el.bossParticipationExportBtn = document.getElementById("bossParticipationExportBtn");
@@ -2158,6 +2160,7 @@ async function loadBossParticipationData() {
   await loadBossParticipationDataModule({
     state,
     bossSupabase,
+    unionBossSupabase,
     normalizeSearchText,
     renderBossParticipationTab,
     alertFn: alert

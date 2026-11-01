@@ -13,3 +13,8 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 export const bossSupabase = BOSS_SUPABASE_URL && BOSS_SUPABASE_ANON_KEY
   ? createClient(BOSS_SUPABASE_URL, BOSS_SUPABASE_ANON_KEY)
   : null;
+
+export const unionBossSupabase = createClient(
+  "https://mkdtqnxkaxnxsxtplgty.supabase.co",
+  "sb_publishable_NLTxRDGJeJORiCiEXY9jdA_gOyvlZR-"
+);

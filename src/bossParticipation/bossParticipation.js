@@ -230,6 +230,7 @@ export function groupBossParticipantsByRecordId(participants) {
 
 export function initializeBossParticipationState(state) {
   state.bossParticipation = {
+    source: "sline",
     startDate: "",
     startTime: "",
     endDate: "",
@@ -243,6 +244,7 @@ export function initializeBossParticipationState(state) {
 }
 
 export async function handleBossParticipationSearch({ state, el, loadBossParticipationData, renderBossParticipationTab }) {
+  state.bossParticipation.source = el.bossParticipationSourceSelect?.value || "sline";
   state.bossParticipation.startDate = String(el.bossParticipationStartDateInput?.value || "").trim();
   state.bossParticipation.startTime = String(el.bossParticipationStartTimeInput?.value || "").trim();
   state.bossParticipation.endDate = String(el.bossParticipationEndDateInput?.value || "").trim();
@@ -254,6 +256,8 @@ export async function handleBossParticipationSearch({ state, el, loadBossPartici
 }
 
 export async function handleBossParticipationReset({ state, el, renderBossParticipationTab }) {
+  state.bossParticipation.source = "sline";
+  if (el.bossParticipationSourceSelect) el.bossParticipationSourceSelect.value = "sline";
   state.bossParticipation.startDate = "";
   state.bossParticipation.startTime = "";
   state.bossParticipation.endDate = "";
@@ -275,6 +279,7 @@ export async function handleBossParticipationReset({ state, el, renderBossPartic
 export async function loadBossParticipationData({
   state,
   bossSupabase,
+  unionBossSupabase,
   normalizeSearchText,
   renderBossParticipationTab,
   alertFn = alert
@@ -286,11 +291,25 @@ export async function loadBossParticipationData({
   renderBossParticipationTab();
 
   try {
-    tabState.rows = await loadBossParticipationRows({
-      bossSupabase,
-      tabState,
-      normalizeSearchText
-    });
+    const sources = [
+      { key: "sline", label: "S라인", client: bossSupabase },
+      { key: "union", label: "S연합", client: unionBossSupabase }
+    ].filter((source) => tabState.source === "all" || source.key === (tabState.source || "sline"));
+    const filters = { ...tabState };
+    const results = await Promise.all(sources.map(async (source) => {
+      if (!source.client) throw new Error(`${source.label} DB 연결 설정이 필요합니다.`);
+      try {
+        const rows = await loadBossParticipationRows({
+          bossSupabase: source.client,
+          tabState: filters,
+          normalizeSearchText
+        });
+        return rows.map((row) => ({ ...row, source: source.key, sourceLabel: source.label }));
+      } catch (error) {
+        throw new Error(`[${source.label}] ${error.message}`);
+      }
+    }));
+    tabState.rows = results.flat().sort((a, b) => new Date(b.cutTime) - new Date(a.cutTime));
     tabState.loaded = true;
   } catch (error) {
     tabState.rows = [];
@@ -354,6 +373,7 @@ export function renderBossParticipationTab({
 }
 
 export function renderBossParticipationInputs({ tabState, setValueIfNeeded }) {
+  setValueIfNeeded("bossParticipationSourceSelect", tabState.source || "sline");
   setValueIfNeeded("bossParticipationStartDateInput", tabState.startDate || "");
   setValueIfNeeded("bossParticipationStartTimeInput", tabState.startTime || "");
   setValueIfNeeded("bossParticipationEndDateInput", tabState.endDate || "");

@@ -648,6 +648,11 @@
               <input type="text" id="bossParticipationParticipantInput" placeholder="참여자 검색">
             </div>
             <div class="distribution-button-row boss-participation-button-row">
+              <select id="bossParticipationSourceSelect" class="newdist-control" aria-label="조회 대상">
+                <option value="sline">S라인</option>
+                <option value="union">S연합</option>
+                <option value="all">전체</option>
+              </select>
               <button class="btn btn-primary" id="bossParticipationSearchBtn" type="button">조회</button>
               <button class="btn btn-gray" id="bossParticipationResetBtn" type="button">초기화</button>
               <button class="btn btn-outline" id="bossParticipationExportBtn" type="button">엑셀 저장</button>
